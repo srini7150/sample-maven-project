@@ -11,9 +11,11 @@ pipeline {
                 sh 'java --version'
             }
         }
-        stage ('build & sonarscan') {
+        stage ("build & SonarQube analysis") {
             steps {
-                sh 'mvn sonar:sonar'
+                withSonarQubeEnv('sonarqube') {
+                    sh 'mvn clean package sonar:sonar'
+                }
             }
         }
         stage ('building docker image') {
